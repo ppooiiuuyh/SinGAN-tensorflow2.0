@@ -59,26 +59,26 @@ img = normalize(img) ;print(img.shape)
 """===========================================================================
                                 build model
 ==========================================================================="""
-""" build model """
-model = Model_Train(config, target_image= img)
-
-""" restore model """
-if config.restore_file is not None :
-    #model.ckpt.restore(config.restore_file)
-    model.ckpt.restore(os.path.join(config.checkpoint_dir+"ckpt-0"))
 
 
 
 """ --------------------------------------------------------------------
 train
 ---------------------------------------------------------------------"""
-for i in range(model.num_scale+1)[::-1]:
+for i in range(8+1)[::-1]:
+    """ build model """
+    model = Model_Train(config, target_image=img)
+    """ restore model """
+    if config.restore_file is not None:
+        model.ckpt.restore(os.path.join(config.checkpoint_dir + "ckpt-0"))
+
     for ii in range(10):
         """ train """
         N= i
         log = model.train_step(N = N, log_interval= 100)
         print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
 
-        """ save """
-        if model.step.numpy() % 1000 == 0:  save_path = model.save()
-        model.step.assign_add(1)
+    """ save """
+    #if model.step.numpy() % 1000 == 0:  save_path = model.save()
+    save_path = model.save()
+    model.step.assign_add(1)
