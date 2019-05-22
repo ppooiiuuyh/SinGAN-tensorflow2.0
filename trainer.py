@@ -76,7 +76,7 @@ for i in range(model.num_scale)[::-1]:
     for ii in range(10000):
         """ train """
         N = model.num_scale
-        log = model.train_step(N = N, log_interval= 100)
+        log = model.train_step(N = i, log_interval= 100)
         print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
 
         """ save """
