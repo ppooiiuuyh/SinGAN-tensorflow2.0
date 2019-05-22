@@ -48,18 +48,20 @@ class Model_Train():
 
     @tf.function
     def training(self,z_fixed, N = 0):
+
+        #zs_for_priors = [tf.random.normal(self.target_images[i + 1].shape) for i in range(self.num_scale)] #graph모드에서는 처음 한번에 모든 tensor가 정의되어있어야함
         priors = [None for i in range(0, self.num_scale+1)]
-        for i in range(N, self.num_scale+1)[::-1]:
+        for i in range(0, self.num_scale+1)[::-1]:
             if i == self.num_scale:
                 priors[i] = tf.zeros_like(self.target_images[i])
             else :
-                z = tf.random.normal(self.target_images[i+1].shape)
+                z = tf.random.normal(self.target_images[i + 1].shape)
                 priors[i] = self.generators[i+1]([z,priors[i+1]])
                 priors[i] = partial_resize(priors[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
 
 
         prior_recons = [None for i in range(0, self.num_scale+1)]
-        for i in range(N, self.num_scale+1)[::-1]:
+        for i in range(0, self.num_scale+1)[::-1]:
             if i == self.num_scale:
                 prior_recons[i] = tf.zeros_like(self.target_images[i])
             else :
@@ -67,10 +69,12 @@ class Model_Train():
                 prior_recons[i] = partial_resize(prior_recons[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
 
 
+        #zs_for_generate = [tf.random.normal(self.target_images[N].shape) for i in range(self.num_scale+1)]
+        #for N in range(self.num_scale+1)[::-1]:
         with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
             z = tf.random.normal(self.target_images[N].shape)
             gen_output = self.generators[N]([z,priors[N]], training=True)
-            gen_recon_output = self.generators[N]([z_fixed  if N == self.num_scale else tf.zeros_like(self.target_images[i]), prior_recons[i]])
+            gen_recon_output = self.generators[N]([z_fixed  if N == self.num_scale else tf.zeros_like(self.target_images[N]), prior_recons[N]])
             disc_real_output = self.discriminators[N]([self.target_images[N]], training=True)
             disc_generated_output = self.discriminators[N]([gen_output], training=True)
 
@@ -86,13 +90,13 @@ class Model_Train():
             gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - self.target_images[N]))
             gen_loss = gen_adv_loss + 10 * gen_recon_loss
 
-            """ optimize """
-            G_vars = self.generators[N].trainable_variables
-            D_vars = self.discriminators[N].trainable_variables
-            discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
-            self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
-            generator_gradients = gen_tape.gradient(gen_loss, G_vars)
-            self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
+        """ optimize """
+        G_vars = self.generators[N].trainable_variables
+        D_vars = self.discriminators[N].trainable_variables
+        discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
+        self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
+        generator_gradients = gen_tape.gradient(gen_loss, G_vars)
+        self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
 
 
         inputs_concat = tf.concat([z, priors[N], prior_recons[N], self.target_images[N]], axis=2)

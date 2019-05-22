@@ -72,14 +72,13 @@ if config.restore_file is not None :
 """ --------------------------------------------------------------------
 train
 ---------------------------------------------------------------------"""
-for i in range(model.num_scale)[::-1]:
-    for ii in range(100):
+for i in range(model.num_scale+1)[::-1]:
+    for ii in range(10):
         """ train """
-        N = model.num_scale
-        log = model.train_step(N = i, log_interval= 100)
+        N= i
+        log = model.train_step(N = N, log_interval= 100)
         print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
 
         """ save """
         if model.step.numpy() % 1000 == 0:  save_path = model.save()
-
         model.step.assign_add(1)
