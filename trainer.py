@@ -60,7 +60,7 @@ img = normalize(img) ;print(img.shape)
                                 build model
 ==========================================================================="""
 """ build model """
-model = Model_Train(config)
+model = Model_Train(config, target_image= img)
 
 """ restore model """
 if config.restore_file is not None :
@@ -72,8 +72,14 @@ if config.restore_file is not None :
 """ --------------------------------------------------------------------
 train
 ---------------------------------------------------------------------"""
-""" train """
-model.train_step(img, log_interval= 100)
+for i in range(model.num_scale)[::-1]:
+    for ii in range(10000):
+        """ train """
+        N = model.num_scale
+        log = model.train_step(N = N, log_interval= 100)
+        print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
 
-exit()
-model.step.assign_add(1)
+        """ save """
+        if model.step.numpy() % 1000 == 0:  save_path = model.save()
+
+        model.step.assign_add(1)
