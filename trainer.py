@@ -1,7 +1,6 @@
 import time, datetime, argparse, cv2
 
 from models.model_train_singan import Model_Train
-from utils.data_utils import *
 from utils.utils import *
 from models.ops import *
 #tf.config.gpu.set_per_process_memory_fraction(0.6)
