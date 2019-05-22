@@ -32,6 +32,23 @@ def generator_adv_loss(disc_generated_output):
 
     return gan_loss
 
+def dicriminator_wgan_loss(discriminator, target_image, fake_image, batch_size):
+    d_loss = tf.reduce_mean(discriminator([fake_image])) - tf.reduce_mean(discriminator([target_image]))
+    epsilon = tf.random_uniform(
+        shape=[batch_size, 1, 1, 1],
+        minval=0.,
+        maxval=1.)
+    X_hat = target_image + epsilon * (fake_image - target_image)
+    D_X_hat = discriminator(X_hat, training = True)
+    grad_D_X_hat = tf.gradients(D_X_hat, [X_hat])[0]
+    red_idx = range(1, X_hat.shape.ndims)
+    slopes = tf.sqrt(tf.reduce_sum(tf.square(grad_D_X_hat), reduction_indices=red_idx))
+    gradient_penalty = tf.reduce_mean((slopes - 1.) ** 2)
+    d_loss = d_loss + 10.0 * gradient_penalty
+    return d_loss
+
+def generator_wgan_loss(d_logits_fake):
+    return -tf.reduce_mean(d_logits_fake)
 
 
 def getHingeDLoss(disc_real_output, disc_generated_output):

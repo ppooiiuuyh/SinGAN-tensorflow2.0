@@ -18,8 +18,10 @@ class Model_Train():
         """ model """
         self.generators = [Generator(self.config.channels, N = i) for i in range(self.num_scale+1)]
         self.discriminators = [Discriminator(self.config.channels) for i in range(self.num_scale+1)]
-        self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-        self.discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        #self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        #self.discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        self.generator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0. , beta_2=0.9)
+        self.discriminator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0., beta_2=0.9)
 
 
         """ saver """
@@ -40,29 +42,36 @@ class Model_Train():
         if N == self.num_scale:
             prior = tf.zeros_like(target_image)
 
-        with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
-            z = tf.random.normal(target_image.shape)
-            gen_output = self.generators[N]([z,prior], training=True)
-            gen_recon_output = self.generators[N]([tf.zeros_like(prior),prior_recon]) if N == self.num_scale else self.generators[N]([prior_recon, tf.zeros_like(prior)])
-            disc_real_output = self.discriminators[N]([target_image], training=True)
-            disc_generated_output = self.discriminators[N]([gen_output], training=True)
-
-            """ loss for discriminator """
-            #disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
-            disc_loss = getHingeDLoss(disc_real_output, disc_generated_output)
-
-            """ loss for generator """
-            #gen_adv_loss = generator_adv_loss(disc_generated_output)
-            gen_adv_loss = getHingeGLoss(disc_generated_output)
-            gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - target_image))
-            gen_loss = gen_adv_loss + 10 * gen_recon_loss
-
         G_vars = self.generators[N].trainable_variables
         D_vars = self.discriminators[N].trainable_variables
-        generator_gradients = gen_tape.gradient(gen_loss, G_vars)
-        discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
-        self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
-        self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
+
+        for i in range(5 +1):
+            with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
+                z = tf.random.normal(target_image.shape)
+                gen_output = self.generators[N]([z,prior], training=True)
+                gen_recon_output = self.generators[N]([tf.zeros_like(prior),prior_recon]) if N == self.num_scale else self.generators[N]([prior_recon, tf.zeros_like(prior)])
+                disc_real_output = self.discriminators[N]([target_image], training=True)
+                disc_generated_output = self.discriminators[N]([gen_output], training=True)
+
+                """ loss for discriminator """
+                #disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
+                #disc_loss = getHingeDLoss(disc_real_output, disc_generated_output)
+                disc_loss = dicriminator_wgan_loss(self.discriminators[N],target_image=target_image,fake_image=gen_output, batch_size=self.config.batch_size)
+
+                """ loss for generator """
+                #gen_adv_loss = generator_adv_loss(disc_generated_output)
+                #gen_adv_loss = getHingeGLoss(disc_generated_output)
+                gen_adv_loss = generator_wgan_loss(disc_generated_output)
+                gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - target_image))
+                gen_loss = gen_adv_loss + 10 * gen_recon_loss
+
+            if i < 5+1:
+                discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
+                self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
+            else :
+                generator_gradients = gen_tape.gradient(gen_loss, G_vars)
+                self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
+
 
 
         inputs_concat = tf.concat([z, prior, target_image], axis=2)
@@ -105,11 +114,30 @@ class Model_Train():
                     for key, value in result_logs_dict.items():
                         value = value.numpy()
                         if len(value.shape) == 0:
-                            tf.summary.scalar("{}_{}".format(summary_name,key), value, step=self.step)
+                            tf.summary.scalar("{}_{}_{}".format(N, summary_name,key), value, step=self.step)
                         elif len(value.shape) in [3,4]:
-                            tf.summary.image("{}_{}".format(summary_name, key), denormalize(value), step=self.step)
+                            tf.summary.image("{}_{}_{}".format(N, summary_name, key), denormalize(value), step=self.step)
 
 
 
             self.step.assign_add(1)
         return ""
+
+# WGAN Loss
+
+		# Gradient Penalty
+		self.epsilon = tf.random_uniform(
+				shape=[self.batch_size, 1, 1, 1],
+				minval=0.,
+				maxval=1.)
+		X_hat = self.X_real + self.epsilon * (self.X_fake - self.X_real)
+		D_X_hat = self.discriminator(X_hat, reuse=True)
+		grad_D_X_hat = tf.gradients(D_X_hat, [X_hat])[0]
+		red_idx = range(1, X_hat.shape.ndims)
+		slopes = tf.sqrt(tf.reduce_sum(tf.square(grad_D_X_hat), reduction_indices=red_idx))
+		gradient_penalty = tf.reduce_mean((slopes - 1.) ** 2)
+		self.d_loss = self.d_loss + 10.0 * gradient_penalty
+
+		self.d_loss_sum = tf.summary.scalar("Discriminator_loss", self.d_loss)
+		self.g_loss_sum = tf.summary.scalar("Generator_loss", self.g_loss)
+		self.gp_sum = tf.summary.scalar("Gradient_penalty", gradient_penalty)
