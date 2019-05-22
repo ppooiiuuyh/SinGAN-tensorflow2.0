@@ -39,7 +39,7 @@ class Model_Train():
 
     @tf.function
     def training(self,prior_recon, prior, target_image, N = 0):
-        if N == self.num_scale:
+        if prior == None:
             prior = tf.zeros_like(target_image)
 
         G_vars = self.generators[N].trainable_variables

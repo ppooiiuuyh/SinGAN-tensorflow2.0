@@ -21,7 +21,7 @@ def Discriminator(channels = 3, N = 0, num_scale = 8):
     x = conv_block(x, fsize, 3, 1)
     x = conv_block(x, fsize, 3, 1)
     x = conv_block(x, fsize, 3, 1)
-    x = conv_block(x, 3, 3, 1, activation=None)
+    x = conv_block(x, fsize, 3, 1, activation=None)
     output = tf.keras.layers.Lambda(lambda x: tf.reduce_mean(x, axis=[1,2,3]))(x)
 
     return tf.keras.Model(inputs=[inputs], outputs=[output])
