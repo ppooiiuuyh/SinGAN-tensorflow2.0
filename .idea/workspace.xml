@@ -25,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/models/model_train_singan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="66" selection-start-line="66" selection-end-line="66" />
+            <state relative-caret-position="174">
+              <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -413,8 +413,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/model_train_singan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
+        <state relative-caret-position="174">
+          <caret line="20" column="8" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
         </state>
       </provider>
     </entry>

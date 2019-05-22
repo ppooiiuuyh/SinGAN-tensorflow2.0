@@ -18,10 +18,10 @@ class Model_Train():
         """ model """
         self.generators = [Generator(self.config.channels, N = i) for i in range(self.num_scale+1)]
         self.discriminators = [Discriminator(self.config.channels) for i in range(self.num_scale+1)]
-        #self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-        #self.discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-        self.generator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0. , beta_2=0.9)
-        self.discriminator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0., beta_2=0.9)
+        self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        self.discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
+        #self.generator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0. , beta_2=0.9)
+        #self.discriminator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0., beta_2=0.9)
 
 
         """ saver """
