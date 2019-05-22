@@ -92,21 +92,23 @@ class Model_Train():
                 recon_prior = partial_resize(recon_outputs[N+1], [input_resized.shape[1], input_resized.shape[2]])
                 result_logs_dict, gen_outputs[N], recon_outputs[N] = self.training(prior_recon = recon_prior, prior= output_prior, target_image = input_resized, N = N)
 
-            self.step.assign_add(1)
             print("[train] N:{} step:{} gan loss:{} rec loss:{}".format(N, self.step.numpy(), result_logs_dict["gan_loss"], result_logs_dict["rec_loss"]))
 
             cv2.imshow('image',denormalize(np.concatenate([gen_outputs[N].numpy(),recon_outputs[N].numpy(),input_resized ],axis=2)[0]))
             cv2.waitKey(10)
 
-        '''
-        """ log summary """
-        if summary_name and self.step.numpy() % log_interval == 0:
-            with self.train_summary_writer.as_default():
-                for key, value in result_logs_dict.items():
-                    value = value.numpy()
-                    if len(value.shape) == 0:
-                        tf.summary.scalar("{}_{}".format(summary_name,key), value, step=self.step)
-                    elif len(value.shape) in [3,4]:
-                        tf.summary.image("{}_{}".format(summary_name, key), denormalize(value), step=self.step)
-        '''
+
+            """ log summary """
+            if summary_name and self.step.numpy() % log_interval == 0:
+                with self.train_summary_writer.as_default():
+                    for key, value in result_logs_dict.items():
+                        value = value.numpy()
+                        if len(value.shape) == 0:
+                            tf.summary.scalar("{}_{}".format(summary_name,key), value, step=self.step)
+                        elif len(value.shape) in [3,4]:
+                            tf.summary.image("{}_{}".format(summary_name, key), denormalize(value), step=self.step)
+
+
+
+            self.step.assign_add(1)
         return ""
