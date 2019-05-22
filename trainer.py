@@ -33,7 +33,7 @@ def generate_expname_automatically():
             time_now.minute, time_now.second)
     return name
 expname  = generate_expname_automatically()
-config.checkpoint_dir += expname ; check_folder(config.checkpoint_dir)
+config.checkpoint_dir += "SinGAN "+ config.model_tag ; check_folder(config.checkpoint_dir)
 config.summary_dir += expname ; check_folder(config.summary_dir)
 
 os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
@@ -64,7 +64,8 @@ model = Model_Train(config)
 
 """ restore model """
 if config.restore_file is not None :
-    model.ckpt.restore(config.restore_file)
+    #model.ckpt.restore(config.restore_file)
+    model.ckpt.restore(os.path.join(config.checkpoint_dir+"ckpt-0"))
 
 
 

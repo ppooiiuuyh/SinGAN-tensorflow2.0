@@ -27,11 +27,14 @@ class Model_Train():
         """ saver """
         self.step = tf.Variable(0,dtype=tf.int64)
         self.ckpt = tf.train.Checkpoint(step=self.step,
-                                   generator_optimizer=self.generator_optimizer,
-                                   discriminator_optimizer=self.discriminator_optimizer,
+                                    generator_optimizer=self.generator_optimizer,
+                                    discriminator_optimizer=self.discriminator_optimizer,
+                                    generator8 = self.generators[8],
+                                    discriminator8 = self.discriminators[8],
+
                                 )
 
-        self.save_manager = tf.train.CheckpointManager(self.ckpt, self.config.checkpoint_dir, max_to_keep=3)
+        self.save_manager = tf.train.CheckpointManager(self.ckpt, self.config.checkpoint_dir, max_to_keep=1)
         self.save  = lambda : self.save_manager.save(checkpoint_number=self.step) #exaple : model.save()
 
 
