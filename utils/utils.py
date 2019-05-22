@@ -18,4 +18,5 @@ def normalize(images):
     return (images.astype(np.float32)/255.0)
 
 def denormalize(images):
+    images = np.clip(images,min = 0, max = 1)
     return (images*255.0).astype(np.uint8)

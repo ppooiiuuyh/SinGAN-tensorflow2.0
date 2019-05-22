@@ -6,7 +6,7 @@ import numpy as np
 
 
 initializer = tf.initializers.VarianceScaling()
-def Discriminator(channels = 3, N = 0):
+def Discriminator(channels = 3, N = 0, num_scale = 8):
     def conv_block(x, filters, size, strides, initializer=initializer, activation = tf.keras.layers.LeakyReLU(alpha=0.2)):
         x = tf.keras.layers.Conv2D(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
         x = InstanceNorm()(x)
@@ -16,7 +16,7 @@ def Discriminator(channels = 3, N = 0):
 
     inputs = tf.keras.layers.Input(shape=[None, None, channels])
 
-    fsize = 32 * 2**((N)//4)
+    fsize = 32 * 2**((num_scale - N)//4)
     x = conv_block(inputs, fsize,3,1)
     x = conv_block(x, fsize, 3, 1)
     x = conv_block(x, fsize, 3, 1)

@@ -94,7 +94,7 @@ class Model_Train():
             print("[train] N:{} step:{} gan loss:{} rec loss:{}".format(N, self.step.numpy(), result_logs_dict["gan_loss"], result_logs_dict["rec_loss"]))
 
             #cv2.imshow('image',denormalize(np.concatenate([gen_outputs[N].numpy(),recon_outputs[N].numpy(),input_resized ],axis=2)[0]))
-            #cv2.waitKey(10)
+            cv2.waitKey(10)
 
 
             """ log summary """
