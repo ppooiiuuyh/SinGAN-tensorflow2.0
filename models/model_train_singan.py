@@ -117,7 +117,8 @@ class Model_Train():
                         elif len(value.shape) in [3,4]:
                             tf.summary.image("{}_{}_{}".format(N, summary_name, key), denormalize(value), step=self.step)
 
-
+            """ save """
+            if self.step.numpy() % 100 == 0:  save_path = model.save()
 
             self.step.assign_add(1)
         return ""

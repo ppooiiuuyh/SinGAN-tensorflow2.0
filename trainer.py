@@ -76,6 +76,4 @@ train
 model.train_step(img, log_interval= 100)
 
 exit()
-""" save model """
-if model.step.numpy() % 100 == 0:  save_path = model.save()
 model.step.assign_add(1)
