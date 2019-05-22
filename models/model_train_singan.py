@@ -70,33 +70,33 @@ class Model_Train():
 
 
         #zs_for_generate = [tf.random.normal(self.target_images[N].shape) for i in range(self.num_scale+1)]
-        #for N in range(self.num_scale+1)[::-1]:
-        with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
-            z = tf.random.normal(self.target_images[N].shape)
-            gen_output = self.generators[N]([z,priors[N]], training=True)
-            gen_recon_output = self.generators[N]([z_fixed  if N == self.num_scale else tf.zeros_like(self.target_images[N]), prior_recons[N]])
-            disc_real_output = self.discriminators[N]([self.target_images[N]], training=True)
-            disc_generated_output = self.discriminators[N]([gen_output], training=True)
+        for N in range(self.num_scale+1)[::-1]:
+            with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
+                z = tf.random.normal(self.target_images[N].shape)
+                gen_output = self.generators[N]([z,priors[N]], training=True)
+                gen_recon_output = self.generators[N]([z_fixed  if N == self.num_scale else tf.zeros_like(self.target_images[N]), prior_recons[N]])
+                disc_real_output = self.discriminators[N]([self.target_images[N]], training=True)
+                disc_generated_output = self.discriminators[N]([gen_output], training=True)
 
-            """ loss for discriminator """
-            disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
-            #disc_loss = getHingeDLoss(disc_real_output, disc_generated_output)
-            #disc_loss = dicriminator_wgan_loss(self.discriminators[N],target_image=target_image,fake_image=gen_output, batch_size=self.config.batch_size)
+                """ loss for discriminator """
+                disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
+                #disc_loss = getHingeDLoss(disc_real_output, disc_generated_output)
+                #disc_loss = dicriminator_wgan_loss(self.discriminators[N],target_image=target_image,fake_image=gen_output, batch_size=self.config.batch_size)
 
-            """ loss for generator """
-            gen_adv_loss = generator_adv_loss(disc_generated_output)
-            #gen_adv_loss = getHingeGLoss(disc_generated_output)
-            #gen_adv_loss = generator_wgan_loss(disc_generated_output)
-            gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - self.target_images[N]))
-            gen_loss = gen_adv_loss + 10 * gen_recon_loss
+                """ loss for generator """
+                gen_adv_loss = generator_adv_loss(disc_generated_output)
+                #gen_adv_loss = getHingeGLoss(disc_generated_output)
+                #gen_adv_loss = generator_wgan_loss(disc_generated_output)
+                gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - self.target_images[N]))
+                gen_loss = gen_adv_loss + 10 * gen_recon_loss
 
-        """ optimize """
-        G_vars = self.generators[N].trainable_variables
-        D_vars = self.discriminators[N].trainable_variables
-        discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
-        self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
-        generator_gradients = gen_tape.gradient(gen_loss, G_vars)
-        self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
+            """ optimize """
+            G_vars = self.generators[N].trainable_variables
+            D_vars = self.discriminators[N].trainable_variables
+            discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
+            self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
+            generator_gradients = gen_tape.gradient(gen_loss, G_vars)
+            self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
 
 
         inputs_concat = tf.concat([z, priors[N], prior_recons[N], self.target_images[N]], axis=2)
