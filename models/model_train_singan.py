@@ -54,14 +54,14 @@ class Model_Train():
                 disc_generated_output = self.discriminators[N]([gen_output], training=True)
 
                 """ loss for discriminator """
-                #disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
+                disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
                 #disc_loss = getHingeDLoss(disc_real_output, disc_generated_output)
-                disc_loss = dicriminator_wgan_loss(self.discriminators[N],target_image=target_image,fake_image=gen_output, batch_size=self.config.batch_size)
+                #disc_loss = dicriminator_wgan_loss(self.discriminators[N],target_image=target_image,fake_image=gen_output, batch_size=self.config.batch_size)
 
                 """ loss for generator """
-                #gen_adv_loss = generator_adv_loss(disc_generated_output)
+                gen_adv_loss = generator_adv_loss(disc_generated_output)
                 #gen_adv_loss = getHingeGLoss(disc_generated_output)
-                gen_adv_loss = generator_wgan_loss(disc_generated_output)
+                #gen_adv_loss = generator_wgan_loss(disc_generated_output)
                 gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - target_image))
                 gen_loss = gen_adv_loss + 10 * gen_recon_loss
 
@@ -76,7 +76,7 @@ class Model_Train():
         inputs_concat = tf.concat([z, prior, target_image], axis=2)
         return_dicts = {"inputs_concat" :inputs_concat}
         return_dicts.update({'disc_loss' : disc_loss})
-        return_dicts.update({'gen_loss' : gen_loss})
+        return_dicts.update({'gen_loss' : gen_avd_loss})
         return_dicts.update({'gan_loss': disc_loss+ gen_adv_loss})
         return_dicts.update({'rec_loss' : gen_recon_loss})
         return_dicts.update({'gen_output': tf.concat([z, prior,gen_output,gen_recon_output, target_image], axis=2) })
@@ -101,7 +101,7 @@ class Model_Train():
                 recon_prior = partial_resize(recon_outputs[N+1], [input_resized.shape[1], input_resized.shape[2]])
                 result_logs_dict, gen_outputs[N], recon_outputs[N] = self.training(prior_recon = recon_prior, prior= output_prior, target_image = input_resized, N = N)
 
-            print("[train] N:{} step:{} gan loss:{} rec loss:{}".format(N, self.step.numpy(), result_logs_dict["gan_loss"], result_logs_dict["rec_loss"]))
+            print("[train] N:{} step:{} disc loss:{} gen loss:{} rec loss:{}".format(N, self.step.numpy(), result_logs_dict["disc_loss"], result_logs_dict["gen_loss"], result_logs_dict["rec_loss"]))
 
             #cv2.imshow('image',denormalize(np.concatenate([gen_outputs[N].numpy(),recon_outputs[N].numpy(),input_resized ],axis=2)[0]))
             cv2.waitKey(10)
