@@ -34,7 +34,7 @@ def generator_adv_loss(disc_generated_output):
 
 def dicriminator_wgan_loss(discriminator, target_image, fake_image, batch_size):
     d_loss = tf.reduce_mean(discriminator([fake_image])) - tf.reduce_mean(discriminator([target_image]))
-    epsilon = tf.random_uniform(
+    epsilon = tf.random.uniform(
         shape=[batch_size, 1, 1, 1],
         minval=0.,
         maxval=1.)
