@@ -42,7 +42,7 @@ def dicriminator_wgan_loss(discriminator, target_image, fake_image, batch_size):
     D_X_hat = discriminator(X_hat, training = True)
     grad_D_X_hat = tf.gradients(D_X_hat, [X_hat])[0]
     red_idx = range(1, X_hat.shape.ndims)
-    slopes = tf.sqrt(tf.reduce_sum(tf.square(grad_D_X_hat), reduction_indices=red_idx))
+    slopes = tf.sqrt(tf.reduce_sum(tf.square(grad_D_X_hat), axis=red_idx))
     gradient_penalty = tf.reduce_mean((slopes - 1.) ** 2)
     d_loss = d_loss + 10.0 * gradient_penalty
     return d_loss
