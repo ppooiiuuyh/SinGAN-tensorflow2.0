@@ -122,22 +122,3 @@ class Model_Train():
 
             self.step.assign_add(1)
         return ""
-
-# WGAN Loss
-
-		# Gradient Penalty
-		self.epsilon = tf.random_uniform(
-				shape=[self.batch_size, 1, 1, 1],
-				minval=0.,
-				maxval=1.)
-		X_hat = self.X_real + self.epsilon * (self.X_fake - self.X_real)
-		D_X_hat = self.discriminator(X_hat, reuse=True)
-		grad_D_X_hat = tf.gradients(D_X_hat, [X_hat])[0]
-		red_idx = range(1, X_hat.shape.ndims)
-		slopes = tf.sqrt(tf.reduce_sum(tf.square(grad_D_X_hat), reduction_indices=red_idx))
-		gradient_penalty = tf.reduce_mean((slopes - 1.) ** 2)
-		self.d_loss = self.d_loss + 10.0 * gradient_penalty
-
-		self.d_loss_sum = tf.summary.scalar("Discriminator_loss", self.d_loss)
-		self.g_loss_sum = tf.summary.scalar("Generator_loss", self.g_loss)
-		self.gp_sum = tf.summary.scalar("Gradient_penalty", gradient_penalty)
