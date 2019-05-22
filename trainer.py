@@ -82,3 +82,5 @@ for i in range(8+1)[::-1]:
     #if model.step.numpy() % 1000 == 0:  save_path = model.save()
     save_path = model.save()
     model.step.assign_add(1)
+
+    del model

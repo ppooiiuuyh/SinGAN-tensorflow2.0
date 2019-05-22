@@ -10,11 +10,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
-              <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
+            <state relative-caret-position="554">
+              <caret line="85" column="13" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -22,10 +22,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/model_train_singan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
+            <state relative-caret-position="-396">
               <caret line="48" column="4" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
             </state>
           </provider>
@@ -137,8 +137,8 @@
         <option value="$PROJECT_DIR$/utils/utils.py" />
         <option value="$PROJECT_DIR$/models/ops.py" />
         <option value="$PROJECT_DIR$/models/discriminator.py" />
-        <option value="$PROJECT_DIR$/trainer.py" />
         <option value="$PROJECT_DIR$/models/model_train_singan.py" />
+        <option value="$PROJECT_DIR$/trainer.py" />
       </list>
     </option>
   </component>
@@ -401,16 +401,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trainer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
-          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../AnoGAN/trainer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-225">
@@ -423,8 +413,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/model_train_singan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
+        <state relative-caret-position="-396">
           <caret line="48" column="4" selection-start-line="48" selection-start-column="4" selection-end-line="48" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="554">
+          <caret line="85" column="13" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
