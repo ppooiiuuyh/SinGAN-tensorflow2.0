@@ -23,14 +23,14 @@ def discriminator_adv_loss(disc_real_output, disc_generated_output):
     gen_loss = loss_object(tf.zeros_like(disc_generated_output), disc_generated_output)
     total_disc_loss = real_loss + gen_loss
 
-    return -total_disc_loss
+    return total_disc_loss
 
 def generator_adv_loss(disc_generated_output):
     gan_loss = loss_object(
             tf.ones_like(disc_generated_output),
             disc_generated_output)
 
-    return -gan_loss
+    return gan_loss
 
 
 

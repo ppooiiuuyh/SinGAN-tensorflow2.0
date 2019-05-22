@@ -48,10 +48,12 @@ class Model_Train():
             disc_generated_output = self.discriminators[N]([gen_output], training=True)
 
             """ loss for discriminator """
-            disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
+            #disc_loss = discriminator_adv_loss(disc_real_output, disc_generated_output)
+            disc_loss = getHingeDLoss(disc_real_output, disc_generated_output)
 
             """ loss for generator """
-            gen_adv_loss = generator_adv_loss(disc_generated_output)
+            #gen_adv_loss = generator_adv_loss(disc_generated_output)
+            gen_adv_loss = getHingeGLoss(disc_generated_output)
             gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - target_image))
             gen_loss = gen_adv_loss + 10 * gen_recon_loss
 
