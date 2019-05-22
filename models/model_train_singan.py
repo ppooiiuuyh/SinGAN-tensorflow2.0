@@ -65,20 +65,19 @@ class Model_Train():
                 gen_recon_loss = tf.reduce_mean(tf.square(gen_recon_output - target_image))
                 gen_loss = gen_adv_loss + 10 * gen_recon_loss
 
-            if i < 5+1:
+            if i < 5:
                 discriminator_gradients = disc_tape.gradient(disc_loss, D_vars)
-                self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
+                self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
             else :
                 generator_gradients = gen_tape.gradient(gen_loss, G_vars)
-                self.discriminator_optimizer.apply_gradients(zip(discriminator_gradients, D_vars))
-
+                self.generator_optimizer.apply_gradients(zip(generator_gradients, G_vars))
 
 
         inputs_concat = tf.concat([z, prior, target_image], axis=2)
         return_dicts = {"inputs_concat" :inputs_concat}
         return_dicts.update({'disc_loss' : disc_loss})
         return_dicts.update({'gen_loss' : gen_loss})
-        return_dicts.update({'gan_loss': disc_loss+ gen_loss})
+        return_dicts.update({'gan_loss': disc_loss+ gen_adv_loss})
         return_dicts.update({'rec_loss' : gen_recon_loss})
         return_dicts.update({'gen_output': tf.concat([z, prior,gen_output,gen_recon_output, target_image], axis=2) })
         return return_dicts, gen_output, gen_recon_output
