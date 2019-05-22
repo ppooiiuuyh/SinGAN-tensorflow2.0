@@ -73,7 +73,7 @@ class Model_Train():
         inputs_concat = tf.concat([z, prior, target_image], axis=2)
         return_dicts = {"inputs_concat" :inputs_concat}
         return_dicts.update({'disc_loss' : disc_loss})
-        return_dicts.update({'gen_loss' : gen_avd_loss})
+        return_dicts.update({'gen_loss' : gen_adv_loss})
         return_dicts.update({'gan_loss': disc_loss+ gen_adv_loss})
         return_dicts.update({'rec_loss' : gen_recon_loss})
         return_dicts.update({'gen_output': tf.concat([z, prior,gen_output,gen_recon_output, target_image], axis=2) })
