@@ -72,7 +72,7 @@ for i in range(8+1)[::-1]:
     if config.restore_file is not None:
         model.ckpt.restore(os.path.join(config.checkpoint_dir + "ckpt-0"))
 
-    for ii in range(10):
+    for ii in range(10000):
         """ train """
         N= i
         log = model.train_step(N = N, log_interval= 100)
