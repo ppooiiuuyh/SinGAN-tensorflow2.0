@@ -73,7 +73,7 @@ if config.restore_file is not None :
 train
 ---------------------------------------------------------------------"""
 for i in range(model.num_scale)[::-1]:
-    for ii in range(10000):
+    for ii in range(100):
         """ train """
         N = model.num_scale
         log = model.train_step(N = i, log_interval= 100)
