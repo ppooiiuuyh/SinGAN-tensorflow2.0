@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../AnoGAN/.idea/AnoGAN.iml" filepath="$PROJECT_DIR$/../AnoGAN/.idea/AnoGAN.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../CycleGAN-tf2/.idea/CycleGAN-tf2.iml" filepath="$PROJECT_DIR$/../CycleGAN-tf2/.idea/CycleGAN-tf2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SNET-Tf2/.idea/SNET-Tf2.iml" filepath="$PROJECT_DIR$/../SNET-Tf2/.idea/SNET-Tf2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SinGAN-tensorflow2.0.iml" filepath="$PROJECT_DIR$/.idea/SinGAN-tensorflow2.0.iml" />
+    </modules>
+  </component>
+</project>
