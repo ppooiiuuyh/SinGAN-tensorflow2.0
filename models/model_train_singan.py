@@ -2,7 +2,6 @@ import sys
 sys.path.append('../') #root path
 from models.generator import *
 from models.discriminator import *
-from utils.data_utils import *
 from utils.utils import *
 from functools import partial
 
