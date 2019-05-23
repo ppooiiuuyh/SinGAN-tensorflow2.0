@@ -70,7 +70,7 @@ model = Model_Train(config, target_image=img)
 """===========================================================================
                                train
 ==========================================================================="""
-for i in range(config.num_scale+1)[::-1]:
+for i in range(config.start_scale+1)[::-1]:
 
     """ train """
     for ii in range(config.itr_per_scale):

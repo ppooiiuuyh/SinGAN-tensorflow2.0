@@ -13,8 +13,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
+            <state relative-caret-position="231">
+              <caret line="72" column="33" selection-start-line="72" selection-start-column="33" selection-end-line="72" selection-end-column="33" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -66,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/models/ops.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="160" column="138" lean-forward="true" selection-start-line="160" selection-start-column="138" selection-end-line="160" selection-end-column="138" />
+            <state relative-caret-position="516">
+              <caret line="160" column="79" lean-forward="true" selection-start-line="160" selection-start-column="79" selection-end-line="160" selection-end-column="79" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -395,8 +395,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
+        <state relative-caret-position="231">
+          <caret line="72" column="33" selection-start-line="72" selection-start-column="33" selection-end-line="72" selection-end-column="33" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
@@ -405,8 +405,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/ops.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="160" column="138" lean-forward="true" selection-start-line="160" selection-start-column="138" selection-end-line="160" selection-end-column="138" />
+        <state relative-caret-position="516">
+          <caret line="160" column="79" lean-forward="true" selection-start-line="160" selection-start-column="79" selection-end-line="160" selection-end-column="79" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
