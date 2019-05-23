@@ -10,11 +10,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-532">
-              <caret line="20" column="72" lean-forward="true" selection-start-line="20" selection-start-column="56" selection-end-line="20" selection-end-column="72" />
+            <state relative-caret-position="361">
+              <caret line="46" column="27" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -33,11 +33,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/model_train_singan.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="130" lean-forward="true" selection-start-line="130" selection-end-line="130" />
+            <state relative-caret-position="399">
+              <caret line="129" column="43" lean-forward="true" selection-start-line="129" selection-start-column="43" selection-end-line="129" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -139,8 +139,8 @@
         <option value="$PROJECT_DIR$/models/discriminator.py" />
         <option value="$PROJECT_DIR$/models/generator.py" />
         <option value="$PROJECT_DIR$/models/ops.py" />
-        <option value="$PROJECT_DIR$/trainer.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/trainer.py" />
         <option value="$PROJECT_DIR$/models/model_train_singan.py" />
       </list>
     </option>
@@ -214,7 +214,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.trainer">
     <configuration name="model_train_singan" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="SinGAN-tensorflow2.0" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -280,9 +280,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.trainer" />
         <item itemvalue="Python.model_train_singan" />
+        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -304,7 +304,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2507903" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2507903" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
       <window_info anchor="bottom" id="Python Console" />
@@ -312,7 +312,7 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32917467" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32917467" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32917467" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -443,16 +443,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/trainer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-532">
-          <caret line="20" column="72" lean-forward="true" selection-start-line="20" selection-start-column="56" selection-end-line="20" selection-end-column="72" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
@@ -465,8 +455,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/model_train_singan.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="130" lean-forward="true" selection-start-line="130" selection-end-line="130" />
+        <state relative-caret-position="399">
+          <caret line="129" column="43" lean-forward="true" selection-start-line="129" selection-start-column="43" selection-end-line="129" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/trainer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="46" column="27" selection-start-line="46" selection-start-column="27" selection-end-line="46" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

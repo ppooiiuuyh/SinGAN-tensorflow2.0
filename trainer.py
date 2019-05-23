@@ -37,7 +37,6 @@ def generate_expname_automatically():
 expname  = generate_expname_automatically()
 config.checkpoint_dir += "SinGAN_" + config.model_tag ; check_folder(config.checkpoint_dir)
 config.summary_dir += expname ; check_folder(config.summary_dir)
-
 os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
 
 
