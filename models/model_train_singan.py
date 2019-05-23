@@ -61,8 +61,8 @@ class Model_Train():
 
     def restore(self):
         for i in range(self.num_scale+1):
-            self.generators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"generator_scale_{}.h5".format(i)))
-            self.discriminators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"discriminator_scale_{}.h5".format(i)))
+            self.generators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"generator_scale_{}.h5".format(i)),  custom_objects={'InstanceNorm':InstanceNorm})
+            self.discriminators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"discriminator_scale_{}.h5".format(i)), custom_objects={'SpecConv2DLayer': SpecConv2DLayer})
 
 
     @tf.function

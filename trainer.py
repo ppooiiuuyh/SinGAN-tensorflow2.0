@@ -69,10 +69,10 @@ model = Model_Train(config, target_image=img)
                                train
 ==========================================================================="""
 for i in range(config.num_scale+1)[::-1]:
+
+    """ train """
     for ii in range(config.itr_per_scale):
-        """ train """
-        N= i
-        log = model.train_step(N = N, log_interval= 100)
+        log = model.train_step(N = i, log_interval= 100)
         print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
         model.step.assign_add(1)
 
