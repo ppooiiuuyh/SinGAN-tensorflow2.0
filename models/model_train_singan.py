@@ -4,6 +4,7 @@ from models.generator import *
 from models.discriminator import *
 from utils.utils import *
 from functools import partial
+import numpy as np
 
 partial_resize = partial(tf.image.resize, method=tf.image.ResizeMethod.BILINEAR, antialias=True)
 class Model_Train():
@@ -125,7 +126,7 @@ class Model_Train():
 
     def train_step(self, N=None, summary_name = "train", log_interval = 100):
         np.random.seed(0)
-        z_fixed = np.random.normal(self.target_images[-1].shape)
+        z_fixed = np.random.normal(self.target_images[-1].shape).astype(np.float32)
         #z_fixed = tf.random.normal(self.target_images[-1].shape, seed=0)
 
         """ training """
