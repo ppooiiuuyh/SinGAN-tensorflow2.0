@@ -35,7 +35,7 @@ def generate_expname_automatically():
             time_now.minute, time_now.second)
     return name
 expname  = generate_expname_automatically()
-config.checkpoint_dir += "SinGAN "+ config.model_tag ; check_folder(config.checkpoint_dir)
+config.checkpoint_dir += "SinGAN_" + config.model_tag ; check_folder(config.checkpoint_dir)
 config.summary_dir += expname ; check_folder(config.summary_dir)
 
 os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
@@ -73,7 +73,7 @@ for i in range(config.num_scale+1)[::-1]:
     """ build model for N """
     if model is not None : del model
     model = Model_Train(config, target_image=img)
-    model.ckpt.restore(os.path.join(config.checkpoint_dir + "ckpt-0"))
+    model.ckpt.restore(os.path.join(config.checkpoint_dir, "ckpt-0"))
 
     for ii in range(config.itr_per_scale):
         """ train """
