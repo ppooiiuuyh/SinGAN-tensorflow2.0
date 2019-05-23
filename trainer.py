@@ -73,7 +73,7 @@ for i in range(config.num_scale+1)[::-1]:
     """ train """
     for ii in range(config.itr_per_scale):
         log = model.train_step(N = i, log_interval= 100)
-        print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
+        print("[train {}] step:{} {}".format(i,model.step.numpy(), log))
         model.step.assign_add(1)
 
     """ save """

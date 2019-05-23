@@ -67,8 +67,6 @@ class Model_Train():
 
     @tf.function
     def training(self, z_fixed, N=0):
-
-        # zs_for_priors = [tf.random.normal(self.target_images[i + 1].shape) for i in range(self.num_scale)] #graph모드에서는 처음 한번에 모든 tensor가 정의되어있어야함
         priors = [None for i in range(0, self.num_scale + 1)]
         for i in range(N, self.num_scale + 1)[::-1]:
             if i == self.num_scale:
@@ -87,7 +85,6 @@ class Model_Train():
                 prior_recons[i] = partial_resize(prior_recons[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
 
 
-        # zs_for_generate = [tf.random.normal(self.target_images[N].shape) for i in range(self.num_scale+1)]
         with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
             z = tf.random.normal(self.target_images[N].shape)
             gen_output = self.generators[N]([z, priors[N]], training=True)
