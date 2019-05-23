@@ -172,7 +172,7 @@ class SpecConv2DLayer(tf.keras.layers.Layer):
             'ksize': self.ksize,
             'strides': self.strides,
         }
-        config = config.update(super(SpecConv2DLayer, self).get_config())
+        config.update(super(SpecConv2DLayer, self).get_config())
         return config
 
     def build(self, input_shape):
