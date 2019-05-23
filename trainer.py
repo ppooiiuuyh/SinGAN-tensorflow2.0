@@ -82,5 +82,5 @@ for i in range(config.num_scale+1)[::-1]:
     """ rebuild model for N-1 """
     del model
     model = Model_Train(config, target_image=img)
-    model.ckpt.restore(os.path.join(config.checkpoint_dir, "ckpt-0"))
-
+    #model.ckpt.restore(os.path.join(config.checkpoint_dir, "ckpt-0"))
+    model.restore()

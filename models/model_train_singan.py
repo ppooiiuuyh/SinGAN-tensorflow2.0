@@ -59,6 +59,11 @@ class Model_Train():
             self.generators[i].save(os.path.join(self.config.checkpoint_dir,"generator_scale_{}.h5".format(i)))
             self.discriminators[i].save(os.path.join(self.config.checkpoint_dir,"discriminator_scale_{}.h5".format(i)))
 
+    def restore(self):
+        for i in range(self.num_scale+1):
+            self.generators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"generator_scale_{}.h5".format(i)))
+            self.discriminators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"discriminator_scale_{}.h5".format(i)))
+
 
     @tf.function
     def training(self, z_fixed, N=0):
