@@ -157,14 +157,23 @@ class AdaptiveInstanceNorm(tf.keras.layers.Layer):
 
 
 class SpecConv2DLayer(tf.keras.layers.Layer):
-    def __init__(self, filters=32, ksize=3, strides=1, padding="SAME", kernel_initializer=None, use_bias=True,  **kwargs):
+    def __init__(self, filters, ksize, strides, padding="SAME", kernel_initializer=None, use_bias=True,  **kwargs):
+        super(SpecConv2DLayer, self).__init__(**kwargs)
         self.ksize = ksize
         self.filters = filters
         self.strides = strides
         self.padding = padding
         self.kernel_initializer =  kernel_initializer
         self.use_bias = use_bias
-        super(SpecConv2DLayer, self).__init__(**kwargs)
+
+    def get_config(self):
+        config = {
+            'filters': self.filters,
+            'kernel_size': self.kernel_size,
+            'strides': self.strides,
+        }
+        config = config.update(super(SpecConv2DLayer, self).get_config())
+        return config
 
     def build(self, input_shape):
         self.kernel = self.add_variable("kernel",
