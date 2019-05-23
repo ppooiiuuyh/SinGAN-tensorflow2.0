@@ -13,7 +13,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="497">
+            <state relative-caret-position="1596">
               <caret line="84" column="49" selection-start-line="84" selection-start-column="49" selection-end-line="84" selection-end-column="49" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -154,6 +154,17 @@
             <path>
               <item name="SinGAN-tensorflow2.0" type="b2602c69:ProjectViewProjectNode" />
               <item name="SinGAN-tensorflow2.0" type="462c0819:PsiDirectoryNode" />
+              <item name="datasets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SinGAN-tensorflow2.0" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SinGAN-tensorflow2.0" type="462c0819:PsiDirectoryNode" />
+              <item name="datasets" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SinGAN-tensorflow2.0" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SinGAN-tensorflow2.0" type="462c0819:PsiDirectoryNode" />
               <item name="models" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -172,6 +183,7 @@
       <recent name="C:\Users\USER\Desktop\workspace\gitrepo_personal\SinGAN-tensorflow2.0\datasets\test" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Desktop\workspace\gitrepo_personal\SinGAN-tensorflow2.0\datasets\test" />
       <recent name="C:\Users\USER\Desktop\workspace\gitrepo_personal\SinGAN-tensorflow2.0\models" />
       <recent name="C:\Users\USER\Desktop\workspace\gitrepo_personal\SinGAN-tensorflow2.0\datasets\trainA" />
       <recent name="C:\Users\USER\Desktop\workspace\gitrepo_personal\SinGAN-tensorflow2.0" />
@@ -254,7 +266,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-1208" width="1936" height="1176" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2507903" />
@@ -405,7 +416,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="497">
+        <state relative-caret-position="1596">
           <caret line="84" column="49" selection-start-line="84" selection-start-column="49" selection-end-line="84" selection-end-column="49" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
