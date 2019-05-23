@@ -31,44 +31,6 @@ def Generator(channels = 3, N = 0):
 
     return tf.keras.Model(inputs=[inputs_noise,inputs], outputs=[output])
 
-'''
-def Generator(channels = 3):
-    def conv_block(x, filters, size, strides, initializer=initializer):
-        x = tf.keras.layers.Conv2D(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
-        x = tf.keras.layers.LeakyReLU(alpha=0.2)(x)
-        x = InstanceNorm()(x)
-        return x
-
-    def deconv_block(x, filters, size, strides, initializer=initializer):
-        x = Tfresize(2.0, 2.0)(x)
-        x = tf.keras.layers.Conv2D(filters, size, strides=1, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
-        x = InstanceNorm()(x)
-        return x
-
-    inputs_noise = tf.keras.layers.Input(shape=[None, None, channels])
-    inputs = tf.keras.layers.Input(shape=[None, None, channels])
-    #encoding
-    x0 = conv_block(inputs,32,4,2)
-    x1 = conv_block(x0, 64, 4, 2)
-    x2 = conv_block(x1, 128, 4, 2)
-    x = conv_block(x2, 256, 4, 2)
-
-
-    #decoding
-    x = deconv_block(x,128,4,2)
-    x = tf.keras.layers.concatenate([x, x2], axis = -1)
-    x = deconv_block(x,64,4,2)
-    x = tf.keras.layers.concatenate([x, x1], axis = -1)
-    x = deconv_block(x,32,4,2)
-    x = tf.keras.layers.concatenate([x, x0], axis = -1)
-
-    x = Tfresize(2.0, 2.0)(x)
-    x = tf.keras.layers.Conv2D(channels, 4, strides=1, padding='SAME', kernel_initializer=initializer, use_bias=True, activation='tanh')(x)
-    output = x
-    print(x)
-    return tf.keras.Model(inputs=[inputs_noise,inputs], outputs=[output])
-'''
-
 
 
 
