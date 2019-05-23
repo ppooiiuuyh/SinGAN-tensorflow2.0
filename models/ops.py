@@ -168,8 +168,8 @@ class SpecConv2DLayer(tf.keras.layers.Layer):
 
     def get_config(self):
         base_config = super(SpecConv2DLayer, self).get_config()
-        base_config['filters'] = self.filters,
-        base_config['ksize'] = self.ksize,
+        base_config['filters'] = self.filters
+        base_config['ksize'] = self.ksize
         base_config['strides'] = self.strides
         return base_config
 
