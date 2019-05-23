@@ -41,7 +41,7 @@ class Model_Train():
                                 )
 
         self.save_manager = tf.train.CheckpointManager(self.ckpt, self.config.checkpoint_dir, max_to_keep=1)
-        self.save  = lambda : self.save_manager.save(checkpoint_number=self.step) #exaple : model.save()
+        self.save  = lambda : self.save_manager.save(checkpoint_number=0) #exaple : model.save()
 
 
     @tf.function
