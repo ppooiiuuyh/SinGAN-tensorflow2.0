@@ -62,19 +62,13 @@ img = normalize(img) ;print(img.shape)
                                 build model
 ==========================================================================="""
 model = None
-
-
+model = Model_Train(config, target_image=img)
 
 
 """===========================================================================
                                train
 ==========================================================================="""
 for i in range(config.num_scale+1)[::-1]:
-    """ build model for N """
-    if model is not None : del model
-    model = Model_Train(config, target_image=img)
-    model.ckpt.restore(os.path.join(config.checkpoint_dir, "ckpt-0"))
-
     for ii in range(config.itr_per_scale):
         """ train """
         N= i
@@ -84,4 +78,9 @@ for i in range(config.num_scale+1)[::-1]:
 
     """ save """
     save_path = model.save()
+
+    """ rebuild model for N-1 """
+    del model
+    model = Model_Train(config, target_image=img)
+    model.ckpt.restore(os.path.join(config.checkpoint_dir, "ckpt-0"))
 
