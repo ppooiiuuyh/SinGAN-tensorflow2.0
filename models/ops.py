@@ -169,7 +169,7 @@ class SpecConv2DLayer(tf.keras.layers.Layer):
     def get_config(self):
         config = {
             'filters': self.filters,
-            'kernel_size': self.kernel_size,
+            'ksize': self.ksize,
             'strides': self.strides,
         }
         config = config.update(super(SpecConv2DLayer, self).get_config())
