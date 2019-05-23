@@ -167,13 +167,11 @@ class SpecConv2DLayer(tf.keras.layers.Layer):
         self.use_bias = use_bias
 
     def get_config(self):
-        config = {
-            'filters': self.filters,
-            'ksize': self.ksize,
-            'strides': self.strides,
-        }
-        config.update(super(SpecConv2DLayer, self).get_config())
-        return config
+        base_config = super(SpecConv2DLayer, self).get_config()
+        base_config['filters'] = self.filters,
+        base_config['ksize'] = self.ksize,
+        base_config['strides'] = self.strides
+        return base_config
 
     def build(self, input_shape):
         self.kernel = self.add_variable("kernel",
