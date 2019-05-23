@@ -15,6 +15,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--gpu", type=str, default=4)  # -1 for CPU
 parser.add_argument("--target_size", type=list, default=250, nargs="+", help = 'Image size after crop.')
 parser.add_argument("--batch_size", type=int, default=1, help= 'Minibatch size(global)')
+parser.add_argument("--num_scale", type=int, default=8, help= 'num_scale')
+parser.add_argument("--itr_per_scale", type=int, default=10000, help= 'train iteration per scale')
 parser.add_argument("--data_root_test", type=str, default= './datasets/test', help= 'Data root dir')
 parser.add_argument("--image_file", type=str, default= './datasets/test/176039.jpg', help= 'Data root dir')
 parser.add_argument("--channels", type=int, default= 3, help= 'Channel size')
@@ -59,28 +61,27 @@ img = normalize(img) ;print(img.shape)
 """===========================================================================
                                 build model
 ==========================================================================="""
+model = None
 
 
 
-""" --------------------------------------------------------------------
-train
----------------------------------------------------------------------"""
-for i in range(8+1)[::-1]:
-    """ build model """
+
+"""===========================================================================
+                               train
+==========================================================================="""
+for i in range(config.num_scale+1)[::-1]:
+    """ build model for N """
+    if model is not None : del model
     model = Model_Train(config, target_image=img)
-    """ restore model """
-    if config.restore_file is not None:
-        model.ckpt.restore(os.path.join(config.checkpoint_dir + "ckpt-0"))
+    model.ckpt.restore(os.path.join(config.checkpoint_dir + "ckpt-0"))
 
-    for ii in range(10000):
+    for ii in range(config.itr_per_scale):
         """ train """
         N= i
         log = model.train_step(N = N, log_interval= 100)
         print("[train {}] step:{} {}".format(N,model.step.numpy(), log))
+        model.step.assign_add(1)
 
     """ save """
-    #if model.step.numpy() % 1000 == 0:  save_path = model.save()
     save_path = model.save()
-    model.step.assign_add(1)
 
-    del model
