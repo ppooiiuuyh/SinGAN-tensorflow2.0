@@ -124,7 +124,7 @@ class Model_Train():
 
 
     def train_step(self, N=None, summary_name = "train", log_interval = 100):
-        z_fixed = tf.random.normal(self.target_images[-1].shape)
+        z_fixed = tf.random.normal(self.target_images[-1].shape, seed=0)
 
         """ training """
         if N == None : N = self.num_scale
