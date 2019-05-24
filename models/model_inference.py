@@ -1,56 +1,127 @@
 import sys
-
 sys.path.append('../') #root path
 from models.generator import *
 from models.discriminator import *
-from utils.data_utils import *
 from utils.utils import *
-from utils.xdog import *
 from functools import partial
+import numpy as np
+import math
 
-class Model_Tester():
-    def __init__(self, config):
+partial_resize = partial(tf.image.resize, method=tf.image.ResizeMethod.BILINEAR, antialias=True)
+class Model_Inference():
+    def __init__(self, config, target_image):
         self.config = config
+        self.num_scale = config.num_scale
+        self.target_image = target_image
         self.build_model()
+        self.step = tf.Variable(0,dtype=tf.int64)
+
 
     def build_model(self):# Build Generator and Discriminator
         """ model """
-        self.generatorF = GeneratorUnet(self.config.channels)
+        self.target_images = [partial_resize(self.target_image, [int(self.target_image.shape[1] * (3 / 4) ** i), int(self.target_image.shape[2] * (3 / 4) ** i)]) for i in range(self.num_scale+1)]
+        for i in self.target_images: print(i.shape)
+        self.generators = [Generator(self.config.channels, N = i) for i in range(self.num_scale+1)]
+        self.discriminators = [Discriminator(self.config.channels) for i in range(self.num_scale+1)]
 
 
-        """ saver """
-        self.step = tf.Variable(0,dtype=tf.int64)
-        self.ckpt = tf.train.Checkpoint(step=self.step,
-                                       generatorF=self.generatorF,
-                                        )
+    def restore(self):
+        self.generators = [tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"generator_scale_{}.h5".format(i)),  custom_objects={'InstanceNorm':InstanceNorm}) for i in range(self.num_scale+1)]
 
 
     @tf.function
-    def inference_runner(self, image):
-        return self.generatorF(image)
+    def __inference(self, z_fixed, N=0, start_N=None):
+        if start_N is None: start_N = self.num_scale
 
 
-    def inference(self, image, scale):
-        s = scale
-        ori_h, ori_w = image.shape[0],image.shape[1] #original shape
-        h_ = ori_h * s - ori_h * s % 8
-        w_ = ori_w * s - ori_w * s % 8
+        priors = [None for i in range(0, self.num_scale + 1)]
+        #priors are replaced with reconX upto start_N
+        for i in range(start_N+1,self.num_scale + 1)[::-1]:
+            if i == self.num_scale:
+                priors[i] = tf.zeros_like(self.target_images[i])
+            else:
+                priors = self.generators[i + 1]([z_fixed if i + 1 == self.num_scale else tf.zeros_like(self.target_images[i + 1]), priors[i + 1]])
+                priors = partial_resize(priors[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
+
+        #from start_N
+        for i in range(N, start_N+1)[::-1]:
+            if i == self.num_scale:
+                priors[i] = tf.zeros_like(self.target_images[i])
+
+            else:
+                z = tf.random.normal(self.target_images[i + 1].shape)
+                priors[i] = self.generators[i + 1]([z, priors[i + 1]])
+                priors[i] = partial_resize(priors[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
+
+        z = tf.random.normal(self.target_images[N].shape)
+        gen_output = self.generators[N]([z, priors[N]], training=True)
+        return gen_output
 
 
-        image = cv2.resize(image, (int(w_), int(h_)))
-        image_xdog = xdog(image)
+    def inference(self,start_N = None):
+        if start_N is None : start_N = self.num_scale
 
-        image = normalize(image)
-        image = image.reshape(1, image.shape[0], image.shape[1], self.config.channels)
-        result = self.generatorF(image).numpy()
-        result = denormalize(np.squeeze(result))
+        np.random.seed(0)
+        z_fixed = np.random.normal(size = self.target_images[-1].shape).astype(np.float32)
+        gen_output = self.__inference(z_fixed=z_fixed, start_N=start_N)
+        return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
 
-        kernel = np.ones((3, 3), np.uint8);   factor = 1 ; intensity = 0.3
-        image_xdog = cv2.erode(image_xdog, kernel, iterations=factor - 1)  # // make dilation image
-        if result.shape.__len__() > 2:  image_xdog = image_xdog.reshape(image_xdog.shape[0], image_xdog.shape[1], 1)
-        imageC = (np.copy(result) * ((image_xdog > 20) * (1 - intensity) + intensity)).astype(np.uint8)
 
-        print(result.shape, imageC.shape)
-        result = np.concatenate([result,imageC], axis=1)
-        return result
+
+
+    @tf.function
+    def __inference_with_inject(self,N=0, inject_N=None,inject_image=None):
+        priors = [None for i in range(0, self.num_scale + 1)]
+
+        for i in range(N, inject_N + 1)[::-1]:
+            if  i == inject_N:
+                priors[i] = inject_image
+
+            else:
+                z = tf.random.normal(self.target_images[i + 1].shape)
+                #z = tf.zeros_like(self.target_images[i + 1])
+                priors[i] = self.generators[i + 1]([z, priors[i + 1]])
+                priors[i] = partial_resize(priors[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
+
+        z = tf.random.normal(inject_image.shape) if inject_N == 0 else tf.random.normal(self.target_images[N].shape)
+        #z = tf.zeros_like(self.target_images[0])
+        gen_output = self.generators[N]([z, priors[N]], training=True)
+        return gen_output
+
+    def inference_paint_to_image(self, inject_N=None):
+        inject_N=self.num_scale-1
+        gen_output = self.__inference_with_inject(inject_N=inject_N, inject_image=self.target_images[inject_N])
+        return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
+
+    def inference_harmonization(self, inject_N=None):
+        inject_N= self.num_scale-1
+        gen_output = self.__inference_with_inject(inject_N=inject_N, inject_image=self.target_images[inject_N])
+        return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
+
+    def inference_editing(self, inject_N=None):
+        inject_N= self.num_scale-3
+        gen_output = self.__inference_with_inject(inject_N=inject_N, inject_image=self.target_images[inject_N])
+        return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
+
+
+
+
+
+    @tf.function
+    def __inference_for_sr(self,noise, inject_image):
+        gen_output = self.generators[0]([noise, inject_image])
+        return gen_output
+
+
+    def inference_sr(self, scale_factor=2, repeat = 4):
+        Hs = [int(self.target_images[0].shape[1] + self.target_images[0].shape[1]* scale_factor **(i/repeat) ) for i in range(repeat)]
+        Ws = [int(self.target_images[0].shape[2] + self.target_images[0].shape[2]* scale_factor **(i/repeat) ) for i in range(repeat)]
+
+        gen_output = self.target_images[0]
+        for H,W in zip(Hs,Ws):
+            inject_img_temp = partial_resize(gen_output,[H,W])
+            z = tf.zeros_like(inject_img_temp)#z = tf.random.normal(inject_img_temp.shape)
+            gen_output = self.__inference_for_sr(noise = z, inject_image=inject_img_temp)
+
+        return  denormalize(gen_output.numpy()[0]), denormalize(partial_resize(self.target_images[0],[Hs[-1],Ws[-1]]).numpy()[0])
 

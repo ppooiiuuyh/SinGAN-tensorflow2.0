@@ -15,6 +15,7 @@ class Model_Train():
         self.build_model()
         log_dir = os.path.join(config.summary_dir)
         self.train_summary_writer = tf.summary.create_file_writer(log_dir)
+        self.step = tf.Variable(0,dtype=tf.int64)
 
 
     def build_model(self):# Build Generator and Discriminator
@@ -23,37 +24,13 @@ class Model_Train():
         for i in self.target_images:
             print(i.shape)
 
-        self.generators = [Generator(self.config.channels, N = i) for i in range(self.num_scale+1)]
-        self.discriminators = [Discriminator(self.config.channels) for i in range(self.num_scale+1)]
+        self.generators = [Generator(self.config.channels, N = i, num_scale = self.num_scale) for i in range(self.num_scale+1)]
+        self.discriminators = [Discriminator(self.config.channels, N= i, num_scale = self.num_scale) for i in range(self.num_scale+1)]
         self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
         self.discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
         #self.generator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0. , beta_2=0.9)
         #self.discriminator_optimizer = tf.keras.optimizers.Adam(0.0001, beta_1=0., beta_2=0.9)
 
-        """ saver """
-        self.step = tf.Variable(0,dtype=tf.int64)
-        '''
-        self.ckpt = tf.train.Checkpoint(step=self.step,
-                                    generator_optimizer=self.generator_optimizer,
-                                    discriminator_optimizer=self.discriminator_optimizer,
-                                    generator8 = self.generators[8],
-                                    discriminator8 = self.discriminators[8],
-                                    generator7=self.generators[7],
-                                    discriminator7=self.discriminators[7],
-                                    generator6=self.generators[6],
-                                    discriminator6=self.discriminators[6],
-                                    generator5=self.generators[5],
-                                    discriminator8=self.discriminators[],
-                                    generator8=self.generators[8],
-                                    discriminator8=self.discriminators[8],
-                                    generator8=self.generators[8],
-                                    discriminator8=self.discriminators[8],
-
-                                        )
-
-        #self.save_manager = tf.train.CheckpointManager(self.ckpt, self.config.checkpoint_dir, max_to_keep=1)
-        #self.save  = lambda : self.save_manager.save(checkpoint_number=0) #exaple : model.save()
-        '''
 
     def save(self):
         for i in range(self.num_scale+1):
