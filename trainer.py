@@ -83,4 +83,4 @@ for i in range(config.num_scale+1)[::-1]:
     """ rebuild model for N-1 """
     del model
     model = Model_Train(config, target_image=img)
-    model.restore(N = i-1)
+    model.restore(N = i-1 if i>= 0  else None)
