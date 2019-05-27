@@ -16,7 +16,7 @@ parser.add_argument("--gpu", type=str, default=4)  # -1 for CPU
 parser.add_argument("--target_size", type=list, default=250, nargs="+", help = 'Image size after crop.')
 parser.add_argument("--batch_size", type=int, default=1, help= 'Minibatch size(global)')
 parser.add_argument("--num_scale", type=int, default=8, help= 'num_scale')
-parser.add_argument("--itr_per_scale", type=int, default=10000, help= 'train iteration per scale')
+parser.add_argument("--itr_per_scale", type=int, default=2000, help= 'train iteration per scale')
 parser.add_argument("--data_root_test", type=str, default= './datasets/test', help= 'Data root dir')
 parser.add_argument("--image_file", type=str, default= './datasets/test/176039.jpg', help= 'Data root dir')
 parser.add_argument("--channels", type=int, default= 3, help= 'Channel size')
@@ -83,4 +83,4 @@ for i in range(config.num_scale+1)[::-1]:
     """ rebuild model for N-1 """
     del model
     model = Model_Train(config, target_image=img)
-    model.restore()
+    model.restore(N = i-1)

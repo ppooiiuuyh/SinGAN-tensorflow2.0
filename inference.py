@@ -26,14 +26,19 @@ config = parser.parse_args()
 
 
 config.checkpoint_dir += "SinGAN_" + config.model_tag ; check_folder(config.checkpoint_dir)
-config.checkpoint_dir = "./pretrained/singan_fd_sky"
+config.checkpoint_dir = "./pretrained/singan_fg_sky"
 os.environ["CUDA_VISIBLE_DEVICES"] = str(config.gpu)
-
 
 """===========================================================================
                                 prepare dataset
 ==========================================================================="""
 """ read  image """
+config.image_file = './datasets/test/93.png'
+#config.image_file = './datasets/test/93_paint.png'
+#config.image_file = './datasets/test/93_harmonization.png'
+#config.image_file = './datasets/test/93_editing.png'
+#config.image_file = './datasets/test/93.png'
+
 img = cv2.imread(config.image_file)[...,::-1] #conver to rgb
 
 """ resize image """
@@ -58,11 +63,16 @@ model.restore()
 """===========================================================================
                                inference
 ==========================================================================="""
-#output,bili_upsampled = model.inference_sr()
+'''
+output, input_ = model.inference_sr()
+cv2.imshow('image', np.concatenate([output, input_], axis=1)[..., ::-1])
+cv2.waitKey(0)
+'''
 while True :
-    #output,input_ = model.inference_paint_to_image()
-    #output,input_ = model.inference_harmonization()
-    #output,input_ = model.inference_editing()
-    output, input_ = model.inference()
+    #output,input_ = model.inference_sr()
+    #output, input_ = model.inference_paint_to_image()
+    #output, input_ = model.inference_harmonization()
+    #output, input_ = model.inference_editing()
+    output, input_ = model.inference(N=0, start_N=8)
     cv2.imshow('image',np.concatenate([output,input_],axis=1)[...,::-1])
     cv2.waitKey(10)

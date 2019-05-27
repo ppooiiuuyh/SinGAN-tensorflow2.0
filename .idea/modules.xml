@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/../CycleGAN-tf2/.idea/CycleGAN-tf2.iml" filepath="$PROJECT_DIR$/../CycleGAN-tf2/.idea/CycleGAN-tf2.iml" />
       <module fileurl="file://$PROJECT_DIR$/../SNET-Tf2/.idea/SNET-Tf2.iml" filepath="$PROJECT_DIR$/../SNET-Tf2/.idea/SNET-Tf2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/SinGAN-tensorflow2.0.iml" filepath="$PROJECT_DIR$/.idea/SinGAN-tensorflow2.0.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SplitNET/.idea/SplitNET.iml" filepath="$PROJECT_DIR$/../SplitNET/.idea/SplitNET.iml" />
     </modules>
   </component>
 </project>

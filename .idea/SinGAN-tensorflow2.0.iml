@@ -7,6 +7,7 @@
     <orderEntry type="module" module-name="CycleGAN-tf2" />
     <orderEntry type="module" module-name="SNET-Tf2" />
     <orderEntry type="module" module-name="AnoGAN" />
+    <orderEntry type="module" module-name="SplitNET" />
   </component>
   <component name="TestRunnerService">
     <option name="projectConfiguration" value="pytest" />

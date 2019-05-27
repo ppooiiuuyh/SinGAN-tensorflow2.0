@@ -40,8 +40,8 @@ class Model_Inference():
             if i == self.num_scale:
                 priors[i] = tf.zeros_like(self.target_images[i])
             else:
-                priors = self.generators[i + 1]([z_fixed if i + 1 == self.num_scale else tf.zeros_like(self.target_images[i + 1]), priors[i + 1]])
-                priors = partial_resize(priors[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
+                priors[i] = self.generators[i + 1]([z_fixed if i + 1 == self.num_scale else tf.zeros_like(self.target_images[i + 1]), priors[i + 1]])
+                priors[i] = partial_resize(priors[i], [self.target_images[i].shape[1], self.target_images[i].shape[2]])
 
         #from start_N
         for i in range(N, start_N+1)[::-1]:
@@ -58,12 +58,12 @@ class Model_Inference():
         return gen_output
 
 
-    def inference(self,start_N = None):
+    def inference(self,N =0 ,start_N = None):
         if start_N is None : start_N = self.num_scale
 
         np.random.seed(0)
         z_fixed = np.random.normal(size = self.target_images[-1].shape).astype(np.float32)
-        gen_output = self.__inference(z_fixed=z_fixed, start_N=start_N)
+        gen_output = self.__inference(z_fixed=z_fixed, N=N, start_N=start_N)
         return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
 
 
@@ -99,7 +99,7 @@ class Model_Inference():
         return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
 
     def inference_editing(self, inject_N=None):
-        inject_N= self.num_scale-3
+        inject_N= self.num_scale-2
         gen_output = self.__inference_with_inject(inject_N=inject_N, inject_image=self.target_images[inject_N])
         return  denormalize(gen_output.numpy()[0]), denormalize(self.target_images[0].numpy()[0])
 
@@ -113,7 +113,7 @@ class Model_Inference():
         return gen_output
 
 
-    def inference_sr(self, scale_factor=2, repeat = 4):
+    def inference_sr(self, scale_factor=2, repeat = 8):
         Hs = [int(self.target_images[0].shape[1] + self.target_images[0].shape[1]* scale_factor **(i/repeat) ) for i in range(repeat)]
         Ws = [int(self.target_images[0].shape[2] + self.target_images[0].shape[2]* scale_factor **(i/repeat) ) for i in range(repeat)]
 
