@@ -7,19 +7,19 @@ import numpy as np
 
 initializer = tf.initializers.VarianceScaling()
 def Discriminator(channels = 3, N = 0, num_scale = 8):
-    def conv_block(x, filters, size, strides, initializer=initializer, activation = tf.keras.layers.LeakyReLU(alpha=0.2)):
-        #x = tf.keras.layers.Conv2D(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
-        #x = InstanceNorm()(x)
-        x = SpecConv2DLayer( filters, size, strides)(x)
-        if activation is not None:
-            x = activation(x)
+    def conv_block (x, filters, size, strides, initializer=initializer):
+        x = tf.keras.layers.Conv2D(filters, size, strides=strides, padding='VALID',kernel_initializer=initializer, use_bias=True)(x)
+        #x =SpecConv2DLayer(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
+        x = InstanceNorm()(x)
+        x = tf.keras.layers.LeakyReLU(alpha=0.2)(x)
         return x
 
-    inputs = tf.keras.layers.Input(shape=[None, None, channels])
-    tf.keras.layers.
 
+    inputs = tf.keras.layers.Input(shape=[None, None, channels])
+    inputs_padded = tf.keras.layers.ZeroPadding2D(padding=(5,5))(inputs)
+    #encoding
     fsize = 32 * 2**((num_scale - N)//4)
-    x = conv_block(inputs, fsize,3,1)
+    x = conv_block(inputs_padded, fsize,3,1)
     x = conv_block(x, fsize, 3, 1)
     x = conv_block(x, fsize, 3, 1)
     x = conv_block(x, fsize, 3, 1)

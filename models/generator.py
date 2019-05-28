@@ -43,17 +43,17 @@ def GeneratorUnet(channels):
     initializer = tf.initializers.VarianceScaling()
 
     def conv_block (x, filters, size, strides, initializer=initializer):
-        #x = tf.keras.layers.Conv2D(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
-        x =SpecConv2DLayer(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
-        #x = InstanceNorm()(x)
+        x = tf.keras.layers.Conv2D(filters, size, strides=strides, padding='VALID',kernel_initializer=initializer, use_bias=True)(x)
+        #x =SpecConv2DLayer(filters, size, strides=strides, padding='SAME',kernel_initializer=initializer, use_bias=True)(x)
+        x = InstanceNorm()(x)
         x = tf.keras.layers.LeakyReLU(alpha=0.2)(x)
         return x
 
 
     inputs = tf.keras.layers.Input(shape=[None, None, channels])
-
+    inputs_padded = tf.keras.layers.ZeroPadding2D(padding=(5,5))(inputs)
     #encoding
-    x0 = conv_block(inputs,32,5,2)
+    x0 = conv_block(inputs_padded,32,5,2)
     x0 = conv_block(x0,64,3,1)
     x1 = conv_block(x0, 128, 3, 2)
     x1 = conv_block(x1, 128, 3, 1)
