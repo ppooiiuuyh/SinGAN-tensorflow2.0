@@ -41,11 +41,11 @@ class Model_Train():
     def restore(self, N = None):
         for i in range(self.num_scale+1):
             self.generators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"generator_scale_{}.h5".format(i)),  custom_objects={'InstanceNorm':InstanceNorm})
-            self.discriminators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"discriminator_scale_{}.h5".format(i)), custom_objects={'SpecConv2DLayer': SpecConv2DLayer})
+            self.discriminators[i] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir,"discriminator_scale_{}.h5".format(i)), custom_objects={'InstanceNorm':InstanceNorm, 'SpecConv2DLayer': SpecConv2DLayer})
 
         if N is not None :
             self.generators[N] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir, "generator_scale_{}.h5".format(N+1)), custom_objects={'InstanceNorm': InstanceNorm})
-            self.discriminators[N] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir, "discriminator_scale_{}.h5".format(N+1)), custom_objects={'SpecConv2DLayer': SpecConv2DLayer})
+            self.discriminators[N] = tf.keras.models.load_model(os.path.join(self.config.checkpoint_dir, "discriminator_scale_{}.h5".format(N+1)), custom_objects={'InstanceNorm':InstanceNorm, 'SpecConv2DLayer': SpecConv2DLayer})
 
     @tf.function
     def training(self, z_fixed, N):
