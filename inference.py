@@ -69,7 +69,6 @@ cv2.imshow('image', np.concatenate([output, input_], axis=1)[..., ::-1])
 cv2.waitKey(0)
 '''
 while True :
-    #output,input_ = model.inference_sr()
     #output, input_ = model.inference_paint_to_image()
     #output, input_ = model.inference_harmonization()
     #output, input_ = model.inference_editing()
